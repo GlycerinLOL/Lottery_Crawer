@@ -2,6 +2,8 @@ import requests
 import json
 from datetime import datetime
 from bs4 import BeautifulSoup
+import sys,io,os
+sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf8')
 
 res = 'https://www.taiwanlottery.com.tw/Lotto/Lotto649/history.aspx'
 id1='Lotto649Control_history_dlQuery_SNo%s'
@@ -34,5 +36,20 @@ data['latest_number'].append({
     '特別獎': super_lottery,
 })
 print(data)
-with open('lottery_number.json','w') as f:
-    json.dump(data, f, ensure_ascii=False)
+output_json = json.dumps(data, ensure_ascii=False)
+file_name = 'lottery_number.json'
+if os.path.isfile(file_name):
+    print('exist')
+    fp = open(file_name,'r')
+    json_original = fp.read()
+    fp.close
+
+    output = json_original.strip()[:-1]+','
+    output += output_json[1:]
+    fp = open(file_name,'w')
+    fp.write(output)
+    fp.close
+else:
+    fp = open(file_name,'w')
+    fp.write(output_json)
+    fp.close
