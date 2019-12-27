@@ -25,22 +25,25 @@ for i in range(1,7):
 #--------------------------------------------------------------------------------    
 super_ = index.find('span',{'id':'SuperLotto638Control_history1_dlQuery_SNo7_0'})
 super_lottery = super_.text #特別獎號碼
+draw_ = index.find('span',{'id':'Lotto649Control_history_dlQuery_L649_DrawTerm_0'})
+draw_term = draw_.text #當期期號
 #--------------------------------------------------------------------------------
 time_now = datetime.now()
 time_now = time_now.strftime("%m/%d/%Y, %H:%M:%S")
 data = {}
-data[time_now] = []
-data[time_now].append({
+data[draw_term] = []
+data[draw_term].append({
+    'running time': time_now,
     'Latest draw date': time,
     'Total money': total,
     'Normal prize': num_list,
     'Special prize': super_lottery,
 })
-print(data) #大樂透資料存進dict
+print(data[draw_term]) #大樂透資料存進dict
 #--------------------------------------------------------------------------------
 output_json = json.dumps(data, ensure_ascii=False)
 file_name = 'lottery_number.json'
-if os.path.isfile(file_name):
+if os.path.isfile(file_name): #若該json已存在，則印出exist且叫出現有數據並與新數據合併存入
     print('exist')
     fp = open(file_name,'r')
     json_original = fp.read()
@@ -51,7 +54,7 @@ if os.path.isfile(file_name):
     fp = open(file_name,'w')
     fp.write(output)
     fp.close
-else:
+else:                         #若該json不存在，則開一個新json並存入新數據
     fp = open(file_name,'w')
     fp.write(output_json)
     fp.close
