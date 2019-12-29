@@ -91,16 +91,27 @@ if term != termcheck:
         fp.close
 else:
     print('資料未更新')
-
-user_term = str(input('請輸入期號: '))
-user_num = input('請輸入樂透號碼: ')
+while True:
+    user_term = str(input('請輸入期號: '))
+    if len(user_term) != 9:
+        print('你的輸入不符合格式')
+        continue
+    else:
+        break
+while True:
+    user_num = input('請輸入樂透號碼: ')
+    if len(user_num) != 12:
+        print('你的輸入不符合格式')
+        continue
+    else:
+        break
 #--------------------------------------------------------------------------------
 user_list = []
 flag = 0
 for a in range(6):
     user_list.append(user_num[flag]+user_num[flag+1]) #讀取使用者輸入的號碼
     flag += 2
-print(user_list)
+print('你輸入的樂透號碼: %s'%(user_list))
 #--------------------------------------------------------------------------------
 file_name = 'lottery_number.json'
 with open(file_name,'r') as f:
@@ -108,45 +119,49 @@ with open(file_name,'r') as f:
 data_dict = (lottery_data[user_term])[0]
 load_list = data_dict['Normal number'] #從檔案中讀取之前的樂透號碼
 same_num = len(Diff(user_list,load_list)) #與普通號比對
-print(same_num)
-#------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 for check in range(6): #檢查特別號
     special = data_dict['Special number']
     special_check = False
     if user_list[check] == special:
         special_check = True
         break
+#--------------------------------------------------------------------------------
+print('本期期號: %s'%(user_term))
+draw_time = data_dict['Latest draw date']
+print('本期開獎時間: %s'%(draw_time))
+
 if same_num == 6:
     prize = (data_dict['prize list (first~normal)'])[0]
-    print('1st prize !')
-    print('You will got %s'%(prize))
-elif same_num == 5 and special_check = True:
+    print('頭獎 !')
+    print('獎金為: %s NTD'%(prize))
+elif same_num == 5 and special_check ==True:
     prize = (data_dict['prize list (first~normal)'])[1]
-    print('2nd prize !')
-    print('You will got %s'%(prize))
+    print('貳獎 !')
+    print('獎金為: %s NTD'%(prize))
 elif same_num == 5:
     prize = (data_dict['prize list (first~normal)'])[2]
-    print('3rd prize !')
-    print('You will got %s'%(prize))    
-elif same_num == 4 and special_check = True:
+    print('參獎 !')
+    print('獎金為: %s NTD'%(prize))   
+elif same_num == 4 and special_check ==True:
     prize = (data_dict['prize list (first~normal)'])[3]
-    print('4th prize !')
-    print('You will got %s'%(prize))
+    print('肆獎 !')
+    print('獎金為: %s NTD'%(prize))
 elif same_num == 4:
     prize = (data_dict['prize list (first~normal)'])[4]
-    print('5th prize !')
-    print('You will got %s'%(prize))
-elif same_num == 3 and special_check = True:
+    print('伍獎 !')
+    print('獎金為: %s NTD'%(prize))
+elif same_num == 3 and special_check ==True:
     prize = (data_dict['prize list (first~normal)'])[5]
-    print('6th prize !')
-    print('You will got %s'%(prize))
-elif same_num == 2 and special_check = True:
+    print('陸獎 !')
+    print('獎金為: %s NTD'%(prize))
+elif same_num == 2 and special_check ==True:
     prize = (data_dict['prize list (first~normal)'])[6]
-    print('7th prize !')
-    print('You will got %s'%(prize))
-elif same_num == 3
+    print('柒獎 !')
+    print('獎金為: %s NTD'%(prize))
+elif same_num == 3:
     prize = (data_dict['prize list (first~normal)'])[7]
-    print('Normal prize !')
-    print('You will got %s'%(prize))
+    print('普獎 !')
+    print('獎金為: %s NTD'%(prize))
 else:
-    print('You got nothing!') #中獎判斷式
+    print('你未中獎!') #中獎判斷式
